@@ -76,6 +76,7 @@ var chimpHelper = {
 
     var setupBrowser = function () {
       log.debug('[chimp][helper] getting browser');
+      console.log('setup begin');
 
       const webdriverioConfigOptions = JSON.parse(process.env['chimp.webdriverio']);
       const webdriverioOptions = merge(
@@ -112,6 +113,7 @@ var chimpHelper = {
 
       log.debug('[chimp][helper] webdriverioOptions are ', JSON.stringify(webdriverioOptions));
       let remoteSession;
+      console.log({ webdriverioOptions });
       if (parseNullableInteger(process.env['CUCUMBER_BROWSERS'])) {
         var options = _.clone(webdriverioOptions);
         options.multiBrowser = true;
@@ -130,11 +132,13 @@ var chimpHelper = {
       }
       global.browser.options = webdriverioOptions;
       chaiAsPromised.transferPromiseness = global.browser.transferPromiseness;
+      console.log('setup end');
     };
 
     var initSingleBrowser = function (browser) {
       log.debug('[chimp][helper] init browser');
       log.debug('[chimp][helper] init browser callback');
+      console.log('init single begin');
 
       browser.screenshotsCount = 0;
       browser.addCommand('capture', function (name, screenshotsPathPrefix) {
@@ -167,14 +171,19 @@ var chimpHelper = {
           height: process.env['chimp.phantom_h'] ? parseInt(process.env['chimp.phantom_h']):1024
         });
       }
+
+      console.log('init single end');
     };
 
     var initBrowser = function () {
+      console.log('init browser begin');
       log.debug('[chimp][hooks] init browser');
       var browser = global.browser;
+      console.log({ browser });
       log.debug('[chimp][hooks] init browser callback');
 
       if (browser.instances) {
+        console.log('instances');
         browser.instances.forEach(function (singleBrowser) {
           const desiredCapabilities = singleBrowser.initSync();
           singleBrowser.desiredCapabilities = desiredCapabilities;
@@ -182,14 +191,17 @@ var chimpHelper = {
         });
       }
       else {
+        console.log('init sync');
         const desiredCapabilities = browser.initSync();
         browser.desiredCapabilities = desiredCapabilities;
+        console.log('will init single browser');
         initSingleBrowser(browser);
       }
-
+      console.log('init browser end');
     };
 
     var addServerExecute = function (ddpInstance) {
+      console.log('add server begin');
       ddpInstance.execute = function (func) {
         var args = Array.prototype.slice.call(arguments, 1);
         var result;
@@ -217,9 +229,11 @@ var chimpHelper = {
           return result.value;
         }
       };
+      console.log('add server begin');
     };
 
     var setupDdp = function () {
+      console.log('setup ddp begin');
       log.debug('[chimp][helper] setup DDP');
       if (process.env['chimp.ddp0']) {
         try {
@@ -256,14 +270,20 @@ var chimpHelper = {
         };
         log.debug('[chimp][helper] DDP not required');
       }
+      console.log('setup ddp end');
     };
 
     try {
+      console.log(1)
       setupBrowser();
+      console.log(2)
       initBrowser();
+      console.log(3)
       if (booleanHelper.isTruthy(process.env['chimp.ddp0'])) {
+        console.log(4)
         setupDdp();
       }
+      console.log(5)
     } catch (error) {
       log.error('[chimp][helper] setupBrowserAndDDP had error');
       log.error(error);
