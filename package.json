@@ -1,6 +1,6 @@
 {
   "name": "quadric-chimp",
-  "version": "0.51.3",
+  "version": "0.51.4",
   "description": "Develop acceptance tests & end-to-end tests with realtime feedback.",
   "keywords": [
     "simian",
@@ -102,7 +102,7 @@
     "request": "^2.79.0",
     "requestretry": "1.5.0",
     "saucelabs": "^1.3.0",
-    "selenium-standalone": "~6.11.0",
+    "selenium-standalone": "~6.1.0",
     "underscore": "~1.8.3",
     "xolvio-ddp": "^0.12.0",
     "xolvio-jasmine-expect": "^1.0.0",
